@@ -29,7 +29,7 @@ async function getRequestOrigin() {
 
   return {
     headerStore,
-    origin: headerStore.get("origin") ?? "http://localhost:3000",
+    origin: headerStore.get("origin") ?? "http://localhost:3000", //there is usually a third option, which is to use an env. variable.
   };
 }
 

@@ -165,7 +165,7 @@ export default function SignupForm({ oauthError }: { oauthError?: string }) {
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="h-11 w-full bg-app-primary text-sm font-semibold text-white hover:bg-app-primary/90"
+          className="h-11 w-full cursor-pointer bg-app-primary text-sm font-semibold text-white hover:bg-app-primary/90"
         >
           {isSubmitting ? "Creating account..." : "Create Account"}
         </Button>
@@ -183,10 +183,10 @@ export default function SignupForm({ oauthError }: { oauthError?: string }) {
         <Button
           type="submit"
           variant="outline"
-          className="h-10 w-full border-app-neutral/15 bg-white text-sm font-medium text-app-neutral hover:bg-app-tertiary"
+          className="h-10 w-full cursor-pointer border-app-neutral/15 bg-white text-sm font-medium text-app-neutral hover:bg-app-tertiary"
         >
           <Image
-            src="/Google%20icon.png"
+            src="/images/auth/Google icon.png"
             alt=""
             width={16}
             height={16}

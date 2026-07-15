@@ -104,7 +104,7 @@ export function HomeNavbar({ user }: { user: HomeNavUser | null }) {
         <nav className="flex items-center justify-between gap-5">
           <Link href="/" className="flex min-w-0 items-center gap-2.5">
             <Image
-              src="/Images/app/Logosymbol.png"
+              src="/images/app/Logosymbol.png"
               alt=""
               width={28}
               height={28}

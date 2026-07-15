@@ -1,3 +1,4 @@
+import SiteFooter from "@/components/home/SiteFooter";
 import SiteNavbar from "@/components/home/SiteNavbar";
 
 export default function MainLayout({
@@ -9,6 +10,7 @@ export default function MainLayout({
     <>
       <SiteNavbar />
       <div className="flex-1 pt-24">{children}</div>
+      <SiteFooter />
     </>
   );
 }

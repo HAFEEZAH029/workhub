@@ -48,13 +48,13 @@ export default async function RegisterPage({
         <section className="flex items-center justify-center px-5 py-8 sm:px-8 md:px-10 lg:px-14">
           <div className="w-full max-w-[420px]">
             <div className="mb-6 space-y-1.5">
-              <p className="text-4xl font-semibold text-app-primary">
+              <p className="text-2xl sm:text-4xl font-semibold text-app-primary">
                 Welcome to Workcorp!
               </p>
-              <h2 className="text-2xl font-semibold leading-tight text-app-neutral">
+              <h2 className="text-xl mt-4 font-semibold leading-tight text-app-neutral">
                 Create your account
               </h2>
-              <p className="text-xs font-semibold text-app-neutral/50">
+              <p className="text-xs font-semibold leading-5 text-app-neutral/50">
                 Book verified workspaces faster and manage every reservation
                 from one account.
               </p>

@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Workhub",
+  title: "WorkCorp",
   description: "Workspace management for hybrid teams.",
 };
 

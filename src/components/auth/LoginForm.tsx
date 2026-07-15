@@ -65,7 +65,7 @@ export default function LoginForm({ oauthError }: { oauthError?: string }) {
           </p>
         )}
 
-        <div className="space-y-2">
+        <div className="space-y-4">
           <Label
             htmlFor="email"
             className="flex items-center gap-1.5 text-app-neutral"
@@ -85,22 +85,14 @@ export default function LoginForm({ oauthError }: { oauthError?: string }) {
           )}
         </div>
 
-        <div className="space-y-2">
-          <div className="flex items-center justify-between gap-3">
-            <Label
+        <div className="space-y-4">
+          <Label
               htmlFor="password"
               className="flex items-center gap-1.5 text-app-neutral"
-            >
+          >
               <Lock className="size-4" />
               Password
-            </Label>
-            <Link
-              href="/forgot-password"
-              className="text-xs font-semibold text-app-primary hover:underline"
-            >
-              Forgot Password?
-            </Link>
-          </div>
+          </Label>
           <div className="relative">
             <Input
               id="password"
@@ -130,7 +122,7 @@ export default function LoginForm({ oauthError }: { oauthError?: string }) {
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="h-12 w-full bg-app-primary text-white hover:bg-app-primary/90"
+          className="h-12 w-full cursor-pointer bg-app-primary text-white hover:bg-app-primary/90"
         >
           {isSubmitting ? "Signing in..." : "Sign In"}
         </Button>
@@ -146,10 +138,10 @@ export default function LoginForm({ oauthError }: { oauthError?: string }) {
         <Button
           type="submit"
           variant="outline"
-          className="h-12 w-full border-app-neutral/15 bg-white text-app-neutral hover:bg-app-tertiary"
+          className="h-12 w-full cursor-pointer border-app-neutral/15 bg-white text-app-neutral hover:bg-app-tertiary"
         >
           <Image
-            src="/Google%20icon.png"
+            src="/images/auth/Google icon.png"
             alt=""
             width={20}
             height={20}
@@ -160,7 +152,7 @@ export default function LoginForm({ oauthError }: { oauthError?: string }) {
       </form>
 
       <p className="text-center text-sm text-app-neutral/65">
-        Don&apos;t have an account?{" "}
+        Dont have an account?{" "}
         <Link
           href="/register"
           className="font-medium text-app-primary hover:underline"
