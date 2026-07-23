@@ -8,7 +8,7 @@ const ContactMenu = () => {
                 <Mail className="size-5 text-app-primary" />
               </span>
               <p className="mt-3 font-bold text-app-neutral">Email Us</p>
-              <p className="text-sm text-app-neutral/65">hello@workhub.io</p>
+              <p className="text-sm text-app-neutral/65">hello@workcorp.io</p>
             </div>
 
             <div className="rounded-xl bg-white p-5 shadow-sm ring-1 ring-app-neutral/10">

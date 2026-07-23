@@ -53,7 +53,7 @@ function UserAvatar({ user }: { user: HomeNavUser }) {
 function AccountMenu({ user }: { user: HomeNavUser }) {
   return (
     <details className="group relative">
-      <summary className="flex h-11 cursor-pointer list-none items-center gap-2 rounded-full bg-app-neutral/70 px-3 text-sm font-semibold text-white ring-1 ring-white/18 transition hover:bg-app-secondary/80 [&::-webkit-details-marker]:hidden">
+      <summary className="flex h-11 cursor-pointer list-none items-center gap-2 rounded-full bg-app-neutral/70 px-3 text-[12px] sm:text-sm font-semibold text-white ring-1 ring-white/18 transition hover:bg-app-secondary/80 [&::-webkit-details-marker]:hidden">
         <UserAvatar user={user} />
         <span className="max-w-[8.5rem] text-app-tertiary truncate sm:max-w-[11rem]">
           {user.username}
@@ -63,14 +63,14 @@ function AccountMenu({ user }: { user: HomeNavUser }) {
       <div className="absolute right-0 top-13 z-30 w-40 overflow-hidden rounded-lg bg-app-tertiary py-1 text-sm text-app-primary shadow-xl ring-1 ring-black/10">
         <Link
           href="/history"
-          className="block px-4 py-2.5 font-medium hover:bg-app-tertiary"
+          className="block px-4 py-1.5 font-medium hover:bg-app-tertiary"
         >
           History
         </Link>
         <form action={logout}>
           <button
             type="submit"
-            className="block w-full px-4 py-2.5 text-left font-medium text-red-600 hover:bg-red-50"
+            className="block w-full px-4 py-1.5 text-left font-medium text-red-600 hover:bg-red-50"
           >
             Logout
           </button>
@@ -88,7 +88,7 @@ function AuthSlot({ user }: { user: HomeNavUser | null }) {
   return (
     <Link
       href="/register"
-      className="inline-flex h-11 items-center justify-center rounded-full bg-white px-5 text-sm font-bold text-app-primary shadow-lg shadow-black/15 transition hover:bg-app-tertiary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+      className="inline-flex h-11 items-center justify-center rounded-full bg-white px-5 text-[12px] sm:text-sm font-bold text-app-primary shadow-lg shadow-black/15 transition hover:bg-app-tertiary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
     >
       Get Started
     </Link>
@@ -100,18 +100,18 @@ export function HomeNavbar({ user }: { user: HomeNavUser | null }) {
 
   return (
     <>
-      <header className="absolute left-1/2 top-4 z-50 w-[calc(100%-2rem)] max-w-7xl -translate-x-1/2 rounded-xl border-t border-l border-app-tertiary/18 bg-app-tertiary/10 px-4 py-3  sm:top-6 sm:px-6">
+      <header className="absolute left-1/2 top-4 z-50 w-[calc(100%-2rem)] max-w-7xl -translate-x-1/2 rounded-xl border-t border-l border-app-tertiary/18 bg-app-tertiary/10  msm:px-4 py-3  sm:top-6 sm:px-6">
         <nav className="flex items-center justify-between gap-5">
-          <Link href="/" className="flex min-w-0 items-center gap-2.5">
+          <Link href="/" className="flex min-w-0 items-center gap-1 sm:gap-2.5">
             <Image
               src="/images/app/Logosymbol.png"
               alt=""
               width={28}
               height={28}
-              className="size-10 shrink-0"
+              className="size-8 sm:size-10 shrink-0"
               priority
             />
-            <span className="text-xl font-bold tracking-tight text-app-secondary">
+            <span className="text-[14px] sm:text-xl font-bold tracking-tight text-app-secondary">
               WorkCorp
             </span>
           </Link>

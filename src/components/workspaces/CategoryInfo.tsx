@@ -2,6 +2,7 @@ import Image from "next/image";
 import { categoryinfo } from "../../types/category";
 import Link from "next/link";
 
+
 const CategoryInfo = ({
   data,
   title,
@@ -70,7 +71,7 @@ const CategoryInfo = ({
             </li>
           </ul>
           <Link href={`/workspaces/${data?.slug}`} className="block">
-            <button className="w-full rounded-lg bg-app-primary py-2.5 font-semibold text-app-tertiary transition-all duration-300 hover:bg-app-primary/80">
+            <button className="w-full cursor-pointer rounded-lg bg-app-primary py-2.5 font-semibold text-app-tertiary transition-all duration-300 hover:bg-app-primary/80">
               View Workspaces
             </button>
           </Link>
