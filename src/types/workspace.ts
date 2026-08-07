@@ -1,3 +1,5 @@
+import { workspacecategory } from "./category";
+
 export type Workspace = {
   id: string;
   category_id?: string;
@@ -57,5 +59,7 @@ export type ComponentLayoutProps = {
 
   onViewDetails: (slug:string) => void;
 
-  onBookNow: (workspace: Workspace) => void;
+  onBookNow: () => void;
+
+  isLoading: boolean;
 };

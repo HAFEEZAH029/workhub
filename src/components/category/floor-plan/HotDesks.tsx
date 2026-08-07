@@ -83,6 +83,7 @@ const HotDesks = ({
   onWorkspaceSelect,
   onViewDetails,
   onBookNow,
+  isLoading
 }: ComponentLayoutProps) => {
   return (
     <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-[#FBFAF6]">
@@ -106,6 +107,7 @@ const HotDesks = ({
               onViewDetails={onViewDetails}
               onBookNow={onBookNow}
               position={position}
+              isLoading={isLoading}
             />
           );
         })}

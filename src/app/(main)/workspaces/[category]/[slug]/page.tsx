@@ -1,5 +1,5 @@
 import StickyHeader from "@/components/details/StickyHeader";
-import { getWorkspaceBySlug } from "@/lib/db/data-query";
+import { getWorkspaceBySlug, getCategoryById } from "@/lib/db/data-query";
 import ImageSlider from "@/components/details/ImageSlider";
 import AboutWorkspace from "@/components/details/AboutWorkspace";
 import AmenitiesAndBookingRules from "@/components/details/AmenitiesandBookingrules";
@@ -15,10 +15,11 @@ type WorkspacePageProps = {
 async function Details ({slug}: {slug:string}) {
 
   const workspace = await getWorkspaceBySlug(slug);
+  const Category = await getCategoryById(workspace.category_id as string);
    
   return (
     <main className="mx-auto mt-10 max-w-7xl space-y-7 px-5 sm:px-5 md:px-8 lg:px-5">
-      <StickyHeader workspace={workspace} />
+      <StickyHeader workspace={workspace} Category={Category} />
       <ImageSlider workspace={workspace} />
       <AboutWorkspace workspace={workspace} />
       <AmenitiesAndBookingRules workspace={workspace} />

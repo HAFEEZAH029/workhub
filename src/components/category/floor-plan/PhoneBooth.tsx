@@ -32,7 +32,7 @@ const POSITIONS = {
   },
 } as const;
 
-const PhoneBooth = ({workspaces, selectedWorkspace, onWorkspaceSelect, onViewDetails, onBookNow}: ComponentLayoutProps) => {
+const PhoneBooth = ({workspaces, selectedWorkspace, onWorkspaceSelect, onViewDetails, onBookNow, isLoading}: ComponentLayoutProps) => {
 
   return (
     <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-[#FBFAF6]">
@@ -55,6 +55,7 @@ const PhoneBooth = ({workspaces, selectedWorkspace, onWorkspaceSelect, onViewDet
             onViewDetails={onViewDetails}
             onBookNow={onBookNow}
             position={position}
+            isLoading={isLoading}
             />
          )
       })}

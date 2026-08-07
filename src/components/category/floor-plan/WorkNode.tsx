@@ -1,6 +1,5 @@
-import { type MouseEvent } from "react";
-import { motion } from "framer-motion";
 import { Workspace } from "@/types/workspace";
+import {motion} from "framer-motion";
 
 type Position = {
     x: number;
@@ -15,32 +14,23 @@ type WorkspaceNodeProps = {
     selected: boolean;
     onWorkspaceSelect: (workspace: Workspace) => void;
     onViewDetails: (slug: string) => void;
-    onBookNow: (workspace: Workspace) => void;
+    onBookNow: () => void;
+    isLoading: boolean
 };
 
-const WorkNode = ({workspace, selected, onWorkspaceSelect, onViewDetails, onBookNow, position}:WorkspaceNodeProps) => {
+const WorkNode = ({workspace, selected, onWorkspaceSelect, onViewDetails, onBookNow,  position, isLoading}:WorkspaceNodeProps) => {
   const actionMenuWidth = Math.max(position.width, 140);
   const actionMenuX = position.x + (position.width / 2) - (actionMenuWidth / 2);
 
-  const handleViewDetails = (event: MouseEvent<HTMLButtonElement>) => {
-    event.stopPropagation();
-    onViewDetails(workspace.slug);
-  };
-
-  const handleBookNow = (event: MouseEvent<HTMLButtonElement>) => {
-    event.stopPropagation();
-    onBookNow(workspace);
-  };
-
   return (
     <motion.g
-    onClick={() => onWorkspaceSelect(workspace)}
-    onDoubleClick={(event) => {
-      event.stopPropagation();
-      onViewDetails(workspace.slug);
-    }}
+    onClick={(event) => {
+            event.stopPropagation();
+            onWorkspaceSelect(workspace)}}
     whileHover={{scale: 1.03}}
-    className="cursor-pointer relative">
+    className="cursor-pointer relative"
+    >
+
       <rect
       x={position.x}
       y={position.y}
@@ -67,7 +57,7 @@ const WorkNode = ({workspace, selected, onWorkspaceSelect, onViewDetails, onBook
 
       <text
       x={position.x + position.width/2}
-      y={position.y + position.height/2 + 20}
+      y={position.y + position.height/2 + 22}
       textAnchor="middle"
       dominantBaseline="middle"
       fontSize={12}
@@ -82,17 +72,24 @@ const WorkNode = ({workspace, selected, onWorkspaceSelect, onViewDetails, onBook
           <div className="pointer-events-auto flex flex-col gap-2 rounded-xl border border-app-neutral/15 bg-white/95 p-2 shadow-lg backdrop-blur-sm">
             <button
               type="button"
-              onClick={handleViewDetails}
-              className="rounded-md bg-app-primary px-2.5 py-1.5 text-left text-xs font-semibold text-app-tertiary transition hover:bg-app-primary/90"
+              onClick={(event) => {
+                event.stopPropagation();
+                onViewDetails(workspace.slug);
+              }}
+              className="rounded-md cursor-pointer bg-app-primary px-2.5 py-1.5 text-left text-xs font-semibold text-app-tertiary transition hover:bg-app-primary/90"
             >
               View details
             </button>
             <button
               type="button"
-              onClick={handleBookNow}
-              className="rounded-md border border-app-primary/20 bg-white px-2.5 py-1.5 text-left text-xs font-semibold text-app-primary transition hover:bg-app-primary/10"
+              onClick={(event) => {
+                event.stopPropagation();
+                onBookNow();
+              }}
+              disabled={isLoading}
+              className="rounded-md cursor-pointer border border-app-primary/20 bg-white px-2.5 py-1.5 text-left text-xs font-semibold text-app-primary transition hover:bg-app-primary/10"
             >
-              Book now
+              {isLoading ? 'Checking status....' : 'Book now'}
             </button>
           </div>
         </foreignObject>

@@ -53,6 +53,7 @@ const PrivateOffices = ({
   onWorkspaceSelect,
   onViewDetails,
   onBookNow,
+  isLoading
 }: ComponentLayoutProps) => {
   return (
     <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-[#FBFAF6]">
@@ -76,6 +77,7 @@ const PrivateOffices = ({
               onViewDetails={onViewDetails}
               onBookNow={onBookNow}
               position={position}
+              isLoading={isLoading}
             />
           );
         })}

@@ -5,7 +5,7 @@ import { Workspace } from "@/types/workspace";
 import { ChevronDown, ListFilter } from "lucide-react";
 import CategoryList from "./CategoryList";
 import LayoutView from "./floor-plan/LayoutView";
-import { FloorType } from "@/types/category";
+import { FloorType, workspacecategory } from "@/types/category";
 
 
 type MenuProps = {
@@ -26,6 +26,7 @@ type FilterProps = {
 type SpaceProps = {
     initialWorkspaces: Workspace[],
     category:string
+    Category: workspacecategory
 }
 
 function TopMenu ({currentFilter, category, onSelect, view, onSetView}: MenuProps) {
@@ -87,7 +88,7 @@ function FilterDropDown ({currentFilter, category, onSelect}:FilterProps) {
     )
 };
 
-const CategoryDisplay = ({initialWorkspaces, category}: SpaceProps) => {
+const CategoryDisplay = ({initialWorkspaces, category, Category}: SpaceProps) => {
 
    const [view, setView] = useState("grid");
    const [currentFilter, setCurrentFilter] = useState<string>("All");
@@ -129,7 +130,7 @@ const CategoryDisplay = ({initialWorkspaces, category}: SpaceProps) => {
       ) : null
       }
      </>
-        ) : (<LayoutView category= {category as FloorType} Workspaces={initialWorkspaces} />)
+        ) : (<LayoutView category= {category as FloorType} Workspaces={initialWorkspaces} Category={Category}/>)
       }
     </section>
   )

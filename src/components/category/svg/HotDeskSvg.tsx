@@ -113,18 +113,18 @@ const HotDeskSvg = () => {
         <rect x="904" y="858" width="38" height="82" />
       </g>
 
-      <g fill={wall} fontFamily="Arial, sans-serif" fontSize="27" textAnchor="middle">
+      <g fill={wall} fontFamily="Arial, sans-serif" fontSize="20" textAnchor="middle">
         <text x="235" y="195">Hot Desks</text>
         <text x="625" y="230">Display</text>
-        <text x="625" y="260">Zone</text>
+        <text x="625" y="255">Zone</text>
         <text x="525" y="550">Display</text>
-        <text x="530" y="585">Zone</text>
+        <text x="530" y="575">Zone</text>
         <text x="210" y="665">Display Zone</text>
         <text x="335" y="790">Lounge</text>
         <text x="620" y="835">Reception</text>
         <text x="795" y="638">Breakroom</text>
-        <text x="855" y="545">Coffee</text>
-        <text x="855" y="575">Station</text>
+        <text x="865" y="545">Coffee</text>
+        <text x="865" y="570">Station</text>
       </g>
 
       <g stroke={detail} strokeWidth="2" fill="none" opacity="0.85">

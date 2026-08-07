@@ -13,7 +13,7 @@ const CategoryView = async ({category}: {category:string}) => {
 
   return (
     <>
-      <CategoryDisplay category={category} initialWorkspaces={catWorkspaces} />
+      <CategoryDisplay category={category} initialWorkspaces={catWorkspaces} Category={Category} />
       <OtherCategories categories={otherCategories} />
     </>
   )

@@ -1,9 +1,13 @@
 import { createClient } from "@/lib/supabase/server";
 import { Workspace, WorkspaceImage, workspace, WorkspaceAmenity } from "@/types/workspace";
+import { BookingDate } from "@/types/booking";
+
+async function getSupabaseClient() {
+    return createClient();
+}
 
 export const getCategories = async () => {
-    const supabase = await createClient();
-
+    const supabase = await getSupabaseClient();
     const {data, error} = await supabase.from('workspace_categories').select('*');
 
     if (error) {
@@ -14,8 +18,7 @@ export const getCategories = async () => {
 };
 
 export const getCategoryBySlug = async (category:string) => {
-    const supabase = await createClient();
-
+    const supabase = await getSupabaseClient();
     const {data, error} = await supabase.from('workspace_categories').select('*').eq("slug", category).single();
 
     if (error) {
@@ -25,9 +28,22 @@ export const getCategoryBySlug = async (category:string) => {
     return data;
 };
 
-export const getWorkspaces = async (categoryId:string) => {
-    const supabase = await createClient();
+export const getCategoryById = async (workspaceID:string) => {
+   const supabase = await getSupabaseClient();
+   const {data, error} = await supabase
+                        .from("workspace_categories")
+                        .select('*')
+                        .eq("id", workspaceID)
+                        .single();
+        if (error) {
+            throw new Error(`Error fetching category: ${error.message}`);
+        }
+    return data;
 
+}
+
+export const getWorkspaces = async (categoryId:string) => {
+    const supabase = await getSupabaseClient();
     const {data, error} = await supabase.from('workspaces').select('*').eq("category_id", categoryId);
 
     if (error) {
@@ -62,8 +78,7 @@ export const getWorkspaces = async (categoryId:string) => {
 };
 
 export const getWorkspaceBySlug = async (Slug:string): Promise<workspace> => {
-   const supabase = await createClient();
- 
+   const supabase = await getSupabaseClient();
    const {data: workspace, error} = await supabase
    .from("workspaces")
    .select(`
@@ -88,3 +103,20 @@ export const getWorkspaceBySlug = async (Slug:string): Promise<workspace> => {
         ),
     };
 };
+
+export const getWorkspaceBookingsByID = async (ID:string): Promise<BookingDate[]> => {
+    const supabase = await getSupabaseClient();
+    const {data, error} = await supabase
+                         .from("bookings")
+                         .select('booking_date')
+                         .eq("workspace_id", ID)
+                         .in("status", ["active", "upcoming"]);
+
+    if (error) {
+        throw new Error(`Could not fetch booking dates: ${error.message}`)
+    };
+
+    return data;
+
+};
+

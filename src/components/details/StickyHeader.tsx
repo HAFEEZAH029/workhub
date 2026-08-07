@@ -1,12 +1,41 @@
+"use client";
 import { workspace } from "@/types/workspace";
+import { workspacecategory } from "@/types/category";
 import { MapPin } from "lucide-react";
+import { useContext } from "react";
+import { useRouter } from "next/navigation";
+import { ModalContext } from "@/lib/context/modal-context";
+import HourlyModal from "@/components/modal/HourlyModal";
+import DayModal from "@/components/modal/DayModal";
+import { useAuth } from "@/util/hooks/useAuth";
 
-const StickyHeader = ({ workspace }: { workspace: workspace }) => {
+type HeaderProps = {
+  workspace: workspace;
+  Category: workspacecategory;
+}
+
+const StickyHeader = ({ workspace, Category }: HeaderProps) => {
   const isHourly = Boolean(workspace.hourly_rate);
   const price = isHourly ? workspace.hourly_rate : workspace.daily_base_price;
+  const { modalOpen, handleOpenModal } = useContext(ModalContext);
+  const {isLoading, isAuthenticated} = useAuth();
+  const router = useRouter();
+
+  const handleBookNow = () => {
+        if (isLoading) return;
+
+        if (!isAuthenticated) {
+            const currentPath = window.location.pathname;
+            router.push(`/login?next=${encodeURIComponent(currentPath)}`);
+        } else {
+           handleOpenModal(Category.booking_type);
+        }
+  };
+
+
 
   return (
-    <section className="sticky top-0 z-30 sm:mx-0 flex flex-col items-center justify-between gap-4 border-b border-app-neutral/10 bg-app-tertiary/95 px-5 py-4 backdrop-blur sm:mx-0 sm:flex-row sm:gap-0 sm:px-6 sm:py-5">
+    <section className="sticky top-0 z-30 sm:mx-0 flex flex-col items-center justify-between gap-4 border-b border-app-neutral/10 bg-app-tertiary/95 px-5 py-4 backdrop-blur sm:flex-row sm:gap-0 sm:px-6 sm:py-5">
       <div className="space-y-1.5 text-center sm:text-left">
         <h1 className="text-xl font-bold text-app-neutral sm:text-2xl">
           {workspace.name}
@@ -38,11 +67,23 @@ const StickyHeader = ({ workspace }: { workspace: workspace }) => {
         </div>
         <button
           type="button"
+          disabled={isLoading}
           className="shrink-0 cursor-pointer rounded-lg bg-app-primary px-6 py-3 text-sm font-semibold text-app-tertiary transition hover:bg-app-primary/85"
+          onClick={handleBookNow}
         >
-          Book Now
+          {isLoading ? 'Checking status....' : 'Book now'}
         </button>
       </div>
+
+      <HourlyModal 
+      isOpen={modalOpen === "hourly"} 
+      selectedWorkspace={workspace} 
+      />
+      
+      <DayModal 
+      isOpen={modalOpen === "day_pass"} 
+      selectedWorkspace={workspace} 
+      />
     </section>
   );
 };
