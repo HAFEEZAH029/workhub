@@ -1,8 +1,9 @@
 import { categoryConfig } from "@/util/config";
 import { Suspense } from "react";
 import TopInfo from "@/components/category/TopInfo";
-import { getCategoryBySlug } from "@/lib/db/data-query";
+import { getCategoryBySlug, getWorkspaceRouteBySlug } from "@/lib/db/data-query";
 import CategoryView from "@/components/category/CategoryView";
+import { notFound, redirect } from "next/navigation";
 
 type CategoryPageProps = {
   params: Promise<{
@@ -34,6 +35,17 @@ export async function TopComponent ({category}:{category:string}) {
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { category } = await params;
+  const workspaceRoute = await getWorkspaceRouteBySlug(category);
+
+  if (workspaceRoute) {
+    redirect(`/workspaces/${workspaceRoute.category}/${workspaceRoute.slug}`);
+  }
+
+  try {
+    await getCategoryBySlug(category);
+  } catch {
+    notFound();
+  }
 
   return (
     <main>

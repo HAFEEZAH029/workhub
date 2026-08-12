@@ -28,6 +28,32 @@ export const getCategoryBySlug = async (category:string) => {
     return data;
 };
 
+export const getWorkspaceRouteBySlug = async (slug: string) => {
+    const supabase = await getSupabaseClient();
+    const {data, error} = await supabase
+        .from("workspaces")
+        .select("slug, workspace_categories(slug)")
+        .eq("slug", slug)
+        .maybeSingle();
+
+    if (error) {
+        throw new Error(`Error fetching workspace route: ${error.message}`);
+    };
+
+    const category = Array.isArray(data?.workspace_categories)
+        ? data?.workspace_categories[0]
+        : data?.workspace_categories;
+
+    if (!data || !category?.slug) {
+        return null;
+    }
+
+    return {
+        category: category.slug as string,
+        slug: data.slug as string,
+    };
+};
+
 export const getCategoryById = async (workspaceID:string) => {
    const supabase = await getSupabaseClient();
    const {data, error} = await supabase
@@ -119,4 +145,3 @@ export const getWorkspaceBookingsByID = async (ID:string): Promise<BookingDate[]
     return data;
 
 };
-

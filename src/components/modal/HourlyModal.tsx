@@ -110,7 +110,7 @@ const HourlyModal = ({ selectedWorkspace, isOpen }: HourlyModalProps) => {
         start_time: selectedStartTime ?? '08:00',
         end_time: selectedEndTime ?? '17:00',
         total_price: totalPrice ?? 0,
-        status: isToday && totalMinutes(currTime) >=  totalMinutes("8:00") ? "active" : "upcoming",
+        status: isToday && totalMinutes(currTime) >=  totalMinutes(selectedStartTime ?? '08:00') ? "active" : "upcoming",
         team_size: selectedWorkspace?.capacity_max  ?? 1
       });
     }

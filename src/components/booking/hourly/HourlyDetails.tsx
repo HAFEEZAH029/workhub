@@ -88,26 +88,6 @@ const HourlyDetails = ({
           return forwardCheck(unBookedSlots, isSameDay) ?? [];
     }, [filteredSlots, fetchedSlots, unBookedSlots, isSameDay]);
 
-    {/*function forwardCheck (arr:string[]) {
-        const higherSlots = sameDayCheck(arr);
-
-        if (isSameDay) {
-            higherSlots?.filter((timeStr) => {
-                const fullMinutes = totalMinutes(timeStr);
-                const minsGap = minutesToString(fullMinutes + 30);
-                const hourGap = minutesToString(fullMinutes + 60);
-                return higherSlots?.includes(minsGap) && higherSlots?.includes(hourGap);
-            })
-        } else {
-            arr.filter((timeStr) => {
-                const fullMinutes = totalMinutes(timeStr);
-                const minsGap = minutesToString(fullMinutes + 30);
-                const hourGap = minutesToString(fullMinutes + 60);
-                return arr.includes(minsGap) && arr.includes(hourGap);
-            })
-        }
-    };  */}
-
     function forwardCheck(arr: string[], isSameDay: boolean) {
       const source = isSameDay ? sameDayCheck(arr) : arr;
 
