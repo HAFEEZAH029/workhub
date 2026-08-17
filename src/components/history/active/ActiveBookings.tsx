@@ -21,11 +21,17 @@ const ActiveBookings = () => {
     enabled: Boolean(userID),
   });
 
-  const [now, setNow] = useState(() => new Date());
+  const [now, setNow] = useState<Date | null>(null);
 
   useEffect(() => {
-    const interval = setInterval(() => setNow(new Date()), 60_000);
-    return () => clearInterval(interval);
+    const updateNow = () => setNow(new Date());
+    const timeout = window.setTimeout(updateNow, 0);
+    const interval = window.setInterval(updateNow, 60_000);
+
+    return () => {
+      window.clearTimeout(timeout);
+      window.clearInterval(interval);
+    };
   }, []);
 
   if (isLoading) {
@@ -55,7 +61,7 @@ const ActiveBookings = () => {
     );
   }
 
-  if (!userID) return null;
+  if (!userID || !now) return null;
 
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">

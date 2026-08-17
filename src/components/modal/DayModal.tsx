@@ -26,16 +26,31 @@ type DayModalProps = {
 
 type BookingData = Omit<Booking, "id">;
 
-const getDayPassPrice = (workspace: Workspace, teamSize = workspace.capacity_max) => {
-  const basePrice = workspace.daily_base_price ?? 0;
-  const maxCapacity = workspace.capacity_max || 1;
+const getDefaultDayTeamSize = (workspace: Workspace) => {
+  const maxCapacity = Number(workspace.capacity_max ?? workspace.capacity_min ?? 1);
+  const minCapacity = Number(workspace.capacity_min ?? 1);
 
-  if (teamSize === maxCapacity) {
-    return basePrice;
+  if (!Number.isFinite(maxCapacity) || maxCapacity <= 0) {
+    return Math.max(1, Number.isFinite(minCapacity) ? minCapacity : 1);
   }
 
-  const price = (basePrice * teamSize) / maxCapacity;
-  return Math.round(price / 100) * 100;
+  return Math.max(minCapacity || 1, maxCapacity);
+};
+
+const getDayPassPrice = (workspace: Workspace, teamSize = workspace.capacity_max) => {
+  const basePrice = Number(workspace.daily_base_price ?? 0);
+  const maxCapacity = Number(workspace.capacity_max ?? workspace.capacity_min ?? 1);
+  const normalizedTeamSize = Number(teamSize ?? maxCapacity);
+
+  if (!Number.isFinite(basePrice) || !Number.isFinite(maxCapacity) || maxCapacity <= 0) {
+    return 0;
+  }
+
+  if (normalizedTeamSize >= maxCapacity) {
+    return Math.round(basePrice);
+  }
+
+  return Math.round((basePrice * normalizedTeamSize) / maxCapacity);
 };
 
 const DayModal = ({ selectedWorkspace, isOpen }: DayModalProps) => {
@@ -46,7 +61,7 @@ const DayModal = ({ selectedWorkspace, isOpen }: DayModalProps) => {
   return (
     <Modal open={isOpen} onClose={handleCloseModal}>
       <DayModalContent
-        key={selectedWorkspace.id}
+        key={`${selectedWorkspace.id}-${isOpen ? "open" : "closed"}`}
         selectedWorkspace={selectedWorkspace}
         onClose={handleCloseModal}
         isOpen={isOpen}
@@ -62,11 +77,8 @@ type DayModalContentProps = {
 };
 
 const DayModalContent = ({ selectedWorkspace, onClose, isOpen }: DayModalContentProps) => {
-  const [selectedTeamSize, setSelectedTeamSize] = useState<number | null>(
-    selectedWorkspace.capacity_max
-  );
-  const [totalPrice, setTotalPrice] = useState<number | null>(
-    getDayPassPrice(selectedWorkspace)
+  const [selectedTeamSize, setSelectedTeamSize] = useState<number | null>(() =>
+    getDefaultDayTeamSize(selectedWorkspace)
   );
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [isWrapperLoading, setIsWrapperLoading] = useState<boolean>(false);
@@ -74,6 +86,7 @@ const DayModalContent = ({ selectedWorkspace, onClose, isOpen }: DayModalContent
   const [onSuccess, setOnSuccess] = useState<boolean>(false);
   const { user} = useAuth();
   const queryClient = useQueryClient();
+  const totalPrice = getDayPassPrice(selectedWorkspace, selectedTeamSize ?? getDefaultDayTeamSize(selectedWorkspace));
   const {mutate, reset, isPending, isError} = useMutation({
     mutationFn: (bookingData: BookingData) => {
         return new Promise<void>((resolve, reject) => {
@@ -99,11 +112,15 @@ const DayModalContent = ({ selectedWorkspace, onClose, isOpen }: DayModalContent
 
   useEffect(() => {
     if (!isOpen) {
-      if (typeof reset === "function") reset();
-      setIsConfirm(false);
-      setOnSuccess(false);
+      const timeout = window.setTimeout(() => {
+        if (typeof reset === "function") reset();
+        setIsConfirm(false);
+        setOnSuccess(false);
+      }, 0);
+
+      return () => window.clearTimeout(timeout);
     }
-  }, [isOpen]);
+  }, [isOpen, reset]);
 
   function handlePayNow () {
     if (!user) {
@@ -141,7 +158,6 @@ const DayModalContent = ({ selectedWorkspace, onClose, isOpen }: DayModalContent
 
   function handleSelectSize(teamSize:number) {
     setSelectedTeamSize(teamSize);
-    setTotalPrice(getDayPassPrice(selectedWorkspace, teamSize));
   };
 
   function handleConfirm() {
@@ -237,6 +253,11 @@ const DayModalContent = ({ selectedWorkspace, onClose, isOpen }: DayModalContent
               </DayBookingWrapper>
             </div>
           )}
+          <div aria-live="polite" className="sr-only">
+            {selectedDate && totalPrice && (
+              `Booking updated to: ${selectedDate} from 8:00 to 17:00 with a total price of ${totalPrice}`
+            )}
+          </div>
       </div>
   );
 };

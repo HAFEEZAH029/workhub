@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, useContext } from "react";
+import dynamic from "next/dynamic";
 import PhoneBooth from "./PhoneBooth";
 import HotDesks from "./HotDesks";
 import PrivateOffices from "./PrivateOffices";
@@ -9,9 +10,15 @@ import { floorconfig, FloorType, workspacecategory } from "@/types/category";
 import { Workspace } from "@/types/workspace";
 import { useRouter } from "next/navigation";
 import { ModalContext } from "@/lib/context/modal-context";
-import HourlyModal from "@/components/modal/HourlyModal";
-import DayModal from "@/components/modal/DayModal";
 import { useAuth } from "@/util/hooks/useAuth";
+
+const HourlyModal = dynamic(() => import("@/components/modal/HourlyModal"), {
+  ssr: false,
+});
+
+const DayModal = dynamic(() => import("@/components/modal/DayModal"), {
+  ssr: false,
+});
 
 
 type LayoutProps = {
@@ -98,7 +105,7 @@ const LayoutView = ({category, Workspaces, Category}: LayoutProps) => {
       isOpen={modalOpen === "hourly"} 
       selectedWorkspace={selectedWorkspace} 
       />
-      
+
       <DayModal 
       isOpen={modalOpen === "day_pass"} 
       selectedWorkspace={selectedWorkspace} 

@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "WorkCorp",
-  description: "Workspace management for hybrid teams.",
+  description: "Workspace booking app for remote workers & hybrid teams.",
 };
 
 export default function RootLayout({

@@ -5,10 +5,15 @@ import {getCategories} from "@/lib/db/data-query";
 import { categoryconfig } from "@/types/category";
 import {Suspense} from "react";
 import { categoryConfig } from "@/util/config";
+import type { Metadata } from "next";
+
+export const metadata:Metadata = {
+  title: "Browse Workspaces",
+  description: "Explore on-demand phone-booths, hot desks, meeting rooms, and private offices for hybrid teams and remote workers.",
+};
 
 
-
-export async function CategoryList ({categoryConfig}: {categoryConfig: categoryconfig}) {
+async function CategoryList ({categoryConfig}: {categoryConfig: categoryconfig}) {
    const categories = await getCategories();
 
    return (

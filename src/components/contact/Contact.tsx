@@ -3,11 +3,12 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Send, CheckCircle2} from "lucide-react";
+import { Send, CheckCircle2, AlertCircle} from "lucide-react";
 import { contactSchema, contactInput } from "@/lib/validation/contact";
 import { SUBJECT_OPTIONS } from "@/util/faq";
 import FaqAccordion from "./FaqAccordion";
 import ContactMenu from "./ContactMenu";
+import { createContactMessage } from "@/lib/actions/contact-action";
 
 
 function SuccessToast({ show }: { show: boolean }) {
@@ -19,13 +20,14 @@ function SuccessToast({ show }: { show: boolean }) {
       }`}
     >
       <CheckCircle2 className="size-4 shrink-0" />
-      Message sent successfully! We'll get back to you soon.
+      Message sent successfully! We&apos;ll get back to you soon.
     </div>
   );
 }
 
 const Contact = () => {
   const [showToast, setShowToast] = useState(false);
+  const [showContactError, setShowContactError] = useState<boolean>(false);
 
   const {
     register,
@@ -42,9 +44,19 @@ const Contact = () => {
     return () => clearTimeout(timer);
   }, [showToast]);
 
+  useEffect(() => {
+    if (!showContactError) return;
+    const timer = setTimeout(() => setShowContactError(false), 5000);
+    return () => clearTimeout(timer);
+  }, [showContactError]);
+
   const onSubmit = async (data: contactInput) => {
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    console.log(data);
+    const result = await createContactMessage(data);
+
+    if (!result.success) {
+      setShowContactError(true)
+      return;
+    }
 
     reset();
     setShowToast(true);
@@ -58,8 +70,8 @@ const Contact = () => {
             Get in touch
           </h1>
           <p className="leading-7 text-app-primary">
-            We're here to help you find the perfect space for your
-            team's next breakthrough. Our FAQs below could be of help.
+            We&apos;re here to help you find the perfect space for your
+            team&apos;s next breakthrough. Our FAQs below could be of help.
           </p>
         </div>
 
@@ -81,35 +93,48 @@ const Contact = () => {
           >
             <SuccessToast show={showToast} />
 
+            {showContactError && (
+              <div className="flex items-center gap-2">
+                <AlertCircle className="size-4 text-red-500"/>
+                <p className="inline-block text-red-600 mr-1.5 text-base">Unable to submit message,please try again</p>
+              </div>
+            )}
+
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
               <div className="space-y-2">
-                <label className="text-sm font-bold text-app-primary">
+                <label htmlFor="full-name" className="text-sm font-bold text-app-primary">
                   Full Name
                 </label>
                 <input
+                  id="full-name"
+                  aria-invalid={!!errors.fullName}
+                  aria-describedby="full-name-error"
                   type="text"
                   placeholder="John Doe"
                   {...register("fullName")}
                   className="w-full rounded-lg border border-app-neutral/20 bg-app-neutral/5 p-3.5 text-sm text-app-neutral placeholder:text-app-neutral/40 focus:border-app-primary focus:outline-none"
                 />
                 {errors.fullName && (
-                  <p className="text-sm text-red-600">
+                  <p id="full-name-error" className="text-sm text-red-600">
                     {errors.fullName.message}
                   </p>
                 )}
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-bold text-app-primary">
+                <label htmlFor="email" className="text-sm font-bold text-app-primary">
                   Work Email
                 </label>
                 <input
+                  id="email"
+                  aria-invalid={!!errors.workEmail}
+                  aria-describedby="email-error"
                   type="text"
                   placeholder="john@company.com"
                   {...register("workEmail")}
                   className="w-full rounded-lg border border-app-neutral/20 bg-app-neutral/5 p-3.5 text-sm text-app-neutral placeholder:text-app-neutral/40 focus:border-app-primary focus:outline-none"
                 />
                 {errors.workEmail && (
-                  <p className="text-sm text-red-600">
+                  <p id="email-error" className="text-sm text-red-600">
                     {errors.workEmail.message}
                   </p>
                 )}
@@ -117,12 +142,15 @@ const Contact = () => {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-bold text-app-primary">
+              <label htmlFor="contact-subject" className="text-sm font-bold text-app-primary">
                 Subject
               </label>
               <select
-                defaultValue="General Inquiry"
+                defaultValue="Select an option"
                 {...register("subject")}
+                id="contact-subject"
+                aria-invalid={!!errors.subject}
+                aria-describedby="contact-subject-error"
                 className="w-full rounded-lg border border-app-neutral/20 bg-app-neutral/5 p-3.5 text-sm text-app-neutral focus:border-app-primary focus:outline-none"
               >
                 {SUBJECT_OPTIONS.map((option) => (
@@ -132,30 +160,34 @@ const Contact = () => {
                 ))}
               </select>
               {errors.subject && (
-                <p className="text-sm text-red-600">
+                <p id="contact-subject-error" className="text-sm text-red-600">
                   {errors.subject.message}
                 </p>
               )}
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-bold text-app-primary">
+              <label htmlFor="contact-message" className="text-sm font-bold text-app-primary">
                 Message
               </label>
               <textarea
+                aria-invalid={!!errors.message}
+                aria-describedby="contact-message-error"
+                id="contact-message"
                 rows={5}
                 placeholder="How can we assist you today?"
                 {...register("message")}
                 className="w-full rounded-lg border border-app-neutral/20 bg-app-neutral/5 p-3.5 text-sm text-app-neutral placeholder:text-app-neutral/40 focus:border-app-primary focus:outline-none"
               />
               {errors.message && (
-                <p className="text-sm text-red-600">
+                <p id="contact-message-error" className="text-sm text-red-600">
                   {errors.message.message}
                 </p>
               )}
             </div>
 
             <button
+            role="submit"
               type="submit"
               disabled={isSubmitting}
               className="inline-flex items-center gap-2 rounded-lg bg-app-primary px-6 py-3 text-sm font-semibold text-app-tertiary transition duration-200 hover:bg-app-primary/85 disabled:cursor-not-allowed disabled:opacity-60"

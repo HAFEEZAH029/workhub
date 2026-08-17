@@ -1,3 +1,5 @@
+'use client';
+
 import { workspace } from "@/types/workspace";
 import {
   Snowflake,
@@ -10,6 +12,8 @@ import {
   VolumeX, Projector, Printer, Wifi, Lock, Monitor, MoveVertical, Coffee, Video, Sun, Presentation,
   type LucideIcon,
 } from "lucide-react";
+import { motion } from "framer-motion";
+import { childBVariants, ContainerBVariants } from "@/lib/animation/animation";
 
 
 const AMENITY_ICON_MAP: Record<string, LucideIcon> = {
@@ -66,23 +70,31 @@ const AmenitiesAndBookingRules = ({ workspace }: { workspace: workspace }) => {
 
       <div className="space-y-4">
         <h2 className="text-xl font-bold text-app-neutral">Amenities</h2>
-        <div className="grid grid-cols-2 gap-x-6 gap-y-5 sm:grid-cols-4">
-          
+        <motion.div
+        variants={ContainerBVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        className="grid grid-cols-2 gap-x-6 gap-y-5 sm:grid-cols-4">
+
           {amenities.map((amenity) => {
             const AmenityIcon = getAmenityIcon(amenity.icon);
 
             return (
-              <div key={amenity.id} className="flex items-center gap-3">
+              <motion.div
+              variants={childBVariants}
+              key={amenity.id}
+              className="flex items-center gap-3">
                 <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-app-primary/20">
                   <AmenityIcon className="size-4.5 text-app-primary" />
                 </span>
                 <p className="text-sm font-medium text-app-neutral">
                   {amenity.name}
                 </p>
-              </div>
+              </motion.div>
             );
           })}
-        </div>
+        </motion.div>
       </div>
 
       <div className="space-y-4 rounded-xl bg-app-secondary/10 mt-18 p-6">

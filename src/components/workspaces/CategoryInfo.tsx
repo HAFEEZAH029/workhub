@@ -1,6 +1,9 @@
+'use client';
+
 import Image from "next/image";
 import { categoryinfo } from "../../types/category";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 
 const CategoryInfo = ({
@@ -17,11 +20,21 @@ const CategoryInfo = ({
         {title}
       </h1>
       <div
-        className={`mt-8 flex flex-col items-center gap-10 lg:flex-row lg:items-center lg:justify-between lg:gap-8 ${
-          reverse ? "lg:flex-row-reverse" : ""
-        }`}
+      className={`mt-8 flex flex-col items-center gap-10 lg:flex-row lg:items-center lg:justify-between lg:gap-8 ${
+      reverse ? "lg:flex-row-reverse" : ""
+      }`}
       >
-        <div className="flex w-full max-w-[24rem] items-center justify-center gap-3 sm:max-w-[28rem] lg:w-[50%] lg:max-w-none">
+        <motion.div
+        initial={{opacity:0, x:50}}
+        whileInView={{opacity:1, x:0}}
+        viewport={{once: true, amount:0.2}}
+        transition={{
+          ease: "easeInOut",
+          duration: 0.4,
+          delay: 0.2
+        }}
+        className="flex w-full max-w-[24rem] items-center justify-center gap-3 sm:max-w-md lg:w-[50%] lg:max-w-none"
+        >
           <div
             className="relative aspect-3/4 w-[47%] overflow-hidden rounded-xl shadow-lg ring-1 ring-app-neutral/10 lg:max-w-[280px]"
             style={{ transform: "scale(1.04) translateZ(30rem) rotateZ(-5deg)" }}
@@ -30,6 +43,7 @@ const CategoryInfo = ({
               src={data?.gallery_image_path}
               alt={data?.name}
               fill
+              priority
               sizes="(min-width: 1024px) 280px, 47vw"
               className="object-cover"
             />
@@ -43,14 +57,23 @@ const CategoryInfo = ({
               src={data?.cover_image_path}
               alt={data?.name}
               fill
+              priority
               sizes="(min-width: 1024px) 280px, 47vw"
               className="object-cover"
             />
           </div>
-        </div>
+        </motion.div>
 
-        {/* Text content */}
-        <div className="w-full space-y-5 lg:w-[50%]">
+        <motion.div
+        initial={{opacity:0, x:-50}}
+        whileInView={{opacity:1, x:0}}
+        viewport={{once: true, amount:0.2}}
+        transition={{
+          ease: "easeInOut",
+          duration: 0.4,
+          delay: 0.2
+        }}
+        className="w-full space-y-5 lg:w-[50%]">
           <p className="inline-flex items-center gap-2 font-semibold uppercase text-app-secondary">
             <span className="size-2 shrink-0 rounded-full bg-app-secondary" />
             {label}
@@ -75,7 +98,7 @@ const CategoryInfo = ({
               View Workspaces
             </button>
           </Link>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

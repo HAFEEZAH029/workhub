@@ -1,5 +1,6 @@
  "use client";
 
+import { useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -51,11 +52,34 @@ function UserAvatar({ user }: { user: HomeNavUser }) {
 }
 
 function AccountMenu({ user }: { user: HomeNavUser }) {
+
+  const detailsRef = useRef<HTMLDetailsElement>(null);
+
+  useEffect(() => {
+    const handlePointerDown = (event: MouseEvent) => {
+      const target = event.target;
+
+      if (!(target instanceof Node) || !detailsRef.current) {
+        return;
+      }
+
+      if (!detailsRef.current.contains(target)) {
+        detailsRef.current.open = false;
+      }
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+    };
+  }, []);
+
   return (
-    <details className="group relative">
+    <details ref={detailsRef} className="group relative">
       <summary className="flex h-11 cursor-pointer list-none items-center gap-2 rounded-full bg-app-neutral/70 px-3 text-[12px] sm:text-sm font-semibold text-white ring-1 ring-white/18 transition hover:bg-app-secondary/80 [&::-webkit-details-marker]:hidden">
         <UserAvatar user={user} />
-        <span className="max-w-[8.5rem] text-app-tertiary truncate sm:max-w-[11rem]">
+        <span className="max-w-34 text-app-tertiary truncate sm:max-w-44">
           {user.username}
         </span>
         <ChevronDown className="size-4 transition group-open:rotate-180" />
@@ -125,7 +149,7 @@ export function HomeNavbar({ user }: { user: HomeNavUser | null }) {
                   key={item.href}
                   href={item.href}
                   aria-current={isActive ? "page" : undefined}
-                  className={`text-xl transition hover:text-app-secondary ${
+                  className={`text-xl transition duration-200 hover:text-app-secondary ${
                     isActive ? "text-app-secondary" : "text-app-neutral"
                   }`}
                 >

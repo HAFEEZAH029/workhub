@@ -7,7 +7,7 @@ import { updateCancelStatus, autoCheckIn } from "@/lib/db/client-query";
 import type { BookingCardData } from "@/lib/db/client-query";
 import type { AutoBooking } from "@/types/booking";
 import { combineDateAndTime } from "@/lib/booking/history";
-import { Calendar, Timer, Loader2, X,MapPin } from "lucide-react";
+import { Calendar, Timer, Loader2, X, MapPin, AlertCircle } from "lucide-react";
 
 type UpcomingBookingCardProps = {
   booking: BookingCardData;
@@ -119,7 +119,7 @@ const Cards = ({ booking, userID }: UpcomingBookingCardProps) => {
           <h3 className="font-bold text-app-neutral">{booking.workspaceName}</h3>
           <p className="flex items-center gap-1.5 text-xs text-app-neutral/60">
               <MapPin className="size-3 shrink-0 text-app-primary" />
-              <span>{booking.locationLabel} || {booking.workspaceCode}</span>
+              <span>{booking.locationLabel} <span className="text-app-neutral/30">•</span> {booking.workspaceCode}</span>
             </p>
           <div className="flex flex-col sm:flex-row items-center gap-3">
             <p className="flex items-center gap-1.5 text-xs text-app-neutral/60">
@@ -168,6 +168,13 @@ const Cards = ({ booking, userID }: UpcomingBookingCardProps) => {
           </button>
         </div>
 
+        <p className="flex items-center gap-1.5 text-app-primary">
+          <AlertCircle className="size-4" />
+          <span className="text-[11px] leading-3">
+            auto check-in ensures you are automatically checked-in once booking becomes active
+          </span>
+        </p>
+
         {isSuccess && (
           <p className="text-xs font-medium text-green-600">
             Auto check-in enabled!
@@ -179,12 +186,12 @@ const Cards = ({ booking, userID }: UpcomingBookingCardProps) => {
           </p>
         )}
         {isCancelSuccess && (
-          <p className="text-right text-xs font-medium text-green-600">
+          <p className="sm:text-right text-center text-xs font-medium text-green-600">
             Booking cancelled!
           </p>
         )}
         {isCancelError && (
-          <p className="rounded-md bg-red-50 px-2 py-1 text-right text-xs font-medium text-red-600">
+          <p className="rounded-md bg-red-50 px-2 py-1 sm:text-right text-center text-xs font-medium text-red-600">
             Failed to cancel booking
           </p>
         )}

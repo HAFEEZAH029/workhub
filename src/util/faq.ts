@@ -24,6 +24,7 @@ export const FAQS = [
 ];
 
 export const SUBJECT_OPTIONS = [
+  "Select An Option",
   "General Inquiry",
   "Sales",
   "Support",

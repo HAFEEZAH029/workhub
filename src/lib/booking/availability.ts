@@ -25,8 +25,8 @@ export function getConsecutiveTimeSlots (minTime:string, maxTime:string) {
 };
 
 
-export function sameDayCheck (arr:string[]): string[] | undefined {
-      const currentMinute = new Date().getHours() * 60 + new Date().getMinutes();
+export function sameDayCheck (arr:string[], currentDate: Date): string[] | undefined {
+      const currentMinute = currentDate.getHours() * 60 + currentDate.getMinutes();
       const cutOffTime = currentMinute + 15;
 
       const filteredSlots = arr.filter((timeStr) => {

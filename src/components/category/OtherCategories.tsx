@@ -1,6 +1,10 @@
+'use client';
+
 import Image from "next/image";
 import Link from "next/link";
 import { workspacecategory } from "@/types/category";
+import { childVariants, ContainerVariants } from "../../lib/animation/animation";
+import { motion } from "framer-motion";
 
 type OtherCategoriesProps = {
   categories: workspacecategory[];
@@ -17,9 +21,15 @@ export default function OtherCategories({ categories }: OtherCategoriesProps) {
         Checkout other workspaces
       </h2>
 
-      <div className="mt-8 grid gap-6 md:grid-cols-3">
+      <motion.div
+      variants={ContainerVariants}
+      initial="hidden"
+      whileInView={"visible"}
+      viewport={{once:true, amount: 0.2 }}
+      className="mt-8 grid gap-6 md:grid-cols-3">
         {categories.map((category) => (
-          <article
+          <motion.article
+            variants={childVariants}
             key={category.id}
             className="overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-app-neutral/10"
           >
@@ -44,9 +54,9 @@ export default function OtherCategories({ categories }: OtherCategoriesProps) {
                 View Catalog
               </Link>
             </div>
-          </article>
+          </motion.article>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }

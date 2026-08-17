@@ -1,6 +1,7 @@
 'use client';
 
 import { DayPicker, getDefaultClassNames } from "@daypicker/react";
+import { useEffect, useState } from "react";
 
 type HourlyCalendarProps = {
   selected?: Date;
@@ -8,8 +9,19 @@ type HourlyCalendarProps = {
 };
 
 const HourlyCalendar = ({ selected, onSelect }: HourlyCalendarProps) => {
+  const [today, setToday] = useState<Date | undefined>(undefined);
   const defaultClassNames = getDefaultClassNames();
   const baseDayStyle = "w-full aspect-square max-w-[40px] flex items-center justify-center rounded-full text-xs sm:text-sm transition-all";
+
+  useEffect(() => {
+    const timeout = window.setTimeout(() => {
+      const nextToday = new Date();
+      nextToday.setHours(0, 0, 0, 0);
+      setToday(nextToday);
+    }, 0);
+
+    return () => window.clearTimeout(timeout);
+  }, []);
 
   return (
     <div className="w-full overflow-x-auto rounded-xl border border-app-primary/10 bg-white p-2 shadow-sm sm:p-4">
@@ -31,7 +43,7 @@ const HourlyCalendar = ({ selected, onSelect }: HourlyCalendarProps) => {
         }}
         selected={selected}
         onSelect={onSelect}
-        disabled={{before: new Date()}}
+        disabled={today ? { before: today } : undefined}
         footer={selected ? `Selected: ${selected.toLocaleDateString()}` : "Pick a day to continue"}
       />
     </div>

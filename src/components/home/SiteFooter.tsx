@@ -1,15 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 
-export default function SiteFooter() {
-  const year = new Date().getFullYear();
+const COPYRIGHT_YEAR = 2026;
 
+export default function SiteFooter() {
   return (
     <footer className="bg-app-neutral px-5 py-8 sm:px-8 lg:px-10">
       <div className="mx-auto flex max-w-7xl flex-col items-center gap-4 sm:flex-row sm:items-center sm:justify-between">
         <Link href="/" className="flex min-w-0 items-center gap-2.5">
           <Image
-            src="/Images/app/Logosymbol.png"
+            src="/images/app/Logosymbol.png"
             alt=""
             width={28}
             height={28}
@@ -21,7 +21,7 @@ export default function SiteFooter() {
         </Link>
 
         <p className="text-sm font-medium text-app-tertiary/60">
-          &copy; {year} WorkCorp. All rights reserved.
+          &copy; {COPYRIGHT_YEAR} WorkCorp. All rights reserved.
         </p>
       </div>
     </footer>

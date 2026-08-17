@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from "react";
 import { createContext, useState, type ReactNode } from "react";
 
 export type BookingModalType = "hourly" | "day_pass" | "";
@@ -44,5 +45,9 @@ export function ModalContextProvider({ children }: ModalContextProviderProps) {
 
   const value = { modalOpen, handleOpenModal, handleCloseModal };
 
-  return <ModalContext.Provider value={value}>{children}</ModalContext.Provider>;
+  return (
+    <ModalContext.Provider value={value}>
+      <Suspense fallback={null}>{children}</Suspense>
+    </ModalContext.Provider>
+  );
 };

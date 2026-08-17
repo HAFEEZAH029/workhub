@@ -6,6 +6,8 @@ import { ChevronDown, ListFilter } from "lucide-react";
 import CategoryList from "./CategoryList";
 import LayoutView from "./floor-plan/LayoutView";
 import { FloorType, workspacecategory } from "@/types/category";
+import { ContainerVariants } from "../../lib/animation/animation";
+import { motion } from "framer-motion";
 
 
 type MenuProps = {
@@ -62,7 +64,7 @@ function FilterDropDown ({currentFilter, category, onSelect}:FilterProps) {
 
     return (
         <details className="group relative">
-            <summary className="flex h-10 cursor-pointer list-none items-center gap-2 rounded-md border border-app-neutral/15 bg-white px-3 text-sm font-bold text-app-neutral shadow-sm transition hover:border-app-primary/40 [&::-webkit-details-marker]:hidden">
+            <summary aria-haspopup = "listbox" className="flex h-10 cursor-pointer list-none items-center gap-2 rounded-md border border-app-neutral/15 bg-white px-3 text-sm font-bold text-app-neutral shadow-sm transition hover:border-app-primary/40 [&::-webkit-details-marker]:hidden">
                 <ListFilter className="size-4" />
                 <span>{currentFilter}</span>
                 <ChevronDown className="size-4 transition group-open:rotate-180" />
@@ -117,11 +119,16 @@ const CategoryDisplay = ({initialWorkspaces, category, Category}: SpaceProps) =>
       {
         view === "grid" ?  (
        <>
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+      <motion.div
+      variants={ContainerVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.10 }}
+      className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {filteredWorkspaces.map((workspace) => (
           <CategoryList key={workspace.id} workspace={workspace} category={category} />
         ))}
-      </div>
+      </motion.div>
 
       {filteredWorkspaces.length === 0 ? (
       <p className="rounded-lg bg-white px-5 py-10 text-center font-semibold text-app-neutral/70 ring-1 ring-app-neutral/10">

@@ -60,15 +60,19 @@ const HourlyModal = ({ selectedWorkspace, isOpen }: HourlyModalProps) => {
 
   useEffect(() => {
     if (!isOpen || !selectedWorkspace) {
-      setSelectedDate(undefined);
-      setSelectedStartTime(null);
-      setSelectedEndTime("select end time");
-      setTotalPrice(null);
-      setIsConfirm(false);
-      setOnSuccess(false);
-      if (typeof reset === "function") reset();
+      const timeout = window.setTimeout(() => {
+        setSelectedDate(undefined);
+        setSelectedStartTime(null);
+        setSelectedEndTime("select end time");
+        setTotalPrice(null);
+        setIsConfirm(false);
+        setOnSuccess(false);
+        if (typeof reset === "function") reset();
+      }, 0);
+
+      return () => window.clearTimeout(timeout);
     }
-  }, [isOpen, selectedWorkspace?.id, reset]);
+  }, [isOpen, selectedWorkspace, selectedWorkspace?.id, reset]);
 
   if (!selectedWorkspace) return null;
 
@@ -180,6 +184,11 @@ const HourlyModal = ({ selectedWorkspace, isOpen }: HourlyModalProps) => {
           onConfirm={handleConfirm}
         />
        </>
+        )}
+      </div>
+      <div aria-live="polite" className="sr-only">
+        {selectedDate && selectedStartTime && selectedEndTime && totalPrice && (
+          `Booking updated to: ${selectedDate} from ${selectedStartTime} to ${selectedEndTime} with a total price of ${totalPrice}`
         )}
       </div>
     </Modal>

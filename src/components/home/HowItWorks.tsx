@@ -1,3 +1,8 @@
+"use client";
+
+import { childVariants, ContainerVariants } from "../../lib/animation/animation";
+import { motion } from "framer-motion";
+
 type Step = {
   number: number;
   title: string;
@@ -38,9 +43,18 @@ export default function HowItWorksSection() {
           </p>
         </div>
 
-        <div className="mt-14 grid grid-cols-1 gap-12 sm:grid-cols-3 sm:gap-8">
+        <motion.div
+        variants={ContainerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.25 }}
+        className="mt-14 grid grid-cols-1 gap-12 sm:grid-cols-3 sm:gap-8"
+        >
           {steps.map(({ number, title, description }) => (
-            <div key={number} className="flex flex-col items-center text-center">
+            <motion.div
+            variants={childVariants}
+            key={number}
+            className="flex flex-col items-center text-center">
               <span className="grid size-11 place-items-center rounded-full bg-app-primary text-base font-bold text-app-tertiary">
                 {number}
               </span>
@@ -50,9 +64,9 @@ export default function HowItWorksSection() {
               <p className="mt-2 max-w-xs text-sm leading-6 text-app-neutral/65">
                 {description}
               </p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

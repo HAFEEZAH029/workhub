@@ -4,13 +4,25 @@ import TopInfo from "@/components/category/TopInfo";
 import { getCategoryBySlug, getWorkspaceRouteBySlug } from "@/lib/db/data-query";
 import CategoryView from "@/components/category/CategoryView";
 import { notFound, redirect } from "next/navigation";
+import type { Metadata } from "next";
 
 type CategoryPageProps = {
   params: Promise<{
     category: string;
   }>;
 };
-export async function TopComponent ({category}:{category:string}) {
+
+export async function generateMetadata({ params }: { params: Promise<{ category: string }> }): Promise<Metadata> {
+  const { category } = await params;
+  const categoryName = category ?? 'workspaces';
+
+  return {
+    title: `Premium ${categoryName} for Rent`,
+    description: `Book high-quality ${categoryName} on-demand. Flexible hourly and daily rates for remote workers.`,
+  };
+}
+
+async function TopComponent ({category}:{category:string}) {
 
   const Category = await getCategoryBySlug(category);
 
@@ -33,7 +45,7 @@ export async function TopComponent ({category}:{category:string}) {
 
 }
 
-export default async function CategoryPage({ params }: CategoryPageProps) {
+async function CategoryPageContent({ params }: CategoryPageProps) {
   const { category } = await params;
   const workspaceRoute = await getWorkspaceRouteBySlug(category);
 
@@ -48,10 +60,18 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   }
 
   return (
+    <>
+      <TopComponent category={category} />
+      <CategoryView category={category} />
+    </>
+  );
+}
+
+export default function CategoryPage({ params }: CategoryPageProps) {
+  return (
     <main>
-      <Suspense fallback = {<p className="text-center mt-10 text-app-primary font-semibold text-2xl">Loading....</p>}>
-        <TopComponent category={category} />
-        <CategoryView category={category} />
+      <Suspense fallback={<p className="text-center mt-10 text-app-primary font-semibold text-2xl">Loading....</p>}>
+        <CategoryPageContent params={params} />
       </Suspense>
     </main>
   );

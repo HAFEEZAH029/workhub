@@ -1,12 +1,15 @@
 import { MailCheck } from "lucide-react";
 import Link from "next/link";
+import { Suspense } from "react";
 import { Button } from "@/components/ui/button";
 
-export default async function CheckEmailPage({
-  searchParams,
-}: {
+type CheckEmailPageProps = {
   searchParams: Promise<{ email?: string }>;
-}) {
+};
+
+async function CheckEmailContent({
+  searchParams,
+}: CheckEmailPageProps) {
   const { email } = await searchParams;
 
   return (
@@ -40,5 +43,13 @@ export default async function CheckEmailPage({
         </Button>
       </section>
     </main>
+  );
+}
+
+export default function CheckEmailPage({ searchParams }: CheckEmailPageProps) {
+  return (
+    <Suspense fallback={null}>
+      <CheckEmailContent searchParams={searchParams} />
+    </Suspense>
   );
 }

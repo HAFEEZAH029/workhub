@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
-import { MapPin, Loader2 } from "lucide-react";
+import { MapPin, Loader2, AlertCircle } from "lucide-react";
 import { checkInUser } from "@/lib/db/client-query";
 import { combineDateAndTime } from "@/lib/booking/history";
 import type { BookingCardData } from "@/lib/db/client-query";
@@ -127,6 +127,7 @@ const ActiveBookingCard = ({ booking, now, userID }: ActiveBookingCardProps) => 
           </div>
 
           <div className="flex items-center gap-2">
+            <p className="text-[13px] font-semibold text-app-primary">Check-In:</p>
             {isPending && (
               <Loader2 className="size-4 animate-spin text-app-primary" />
             )}
@@ -153,13 +154,20 @@ const ActiveBookingCard = ({ booking, now, userID }: ActiveBookingCardProps) => 
           </div>
         </div>
 
+        <p className="flex items-center sm:justify-end gap-1 text-app-primary">
+                  <AlertCircle className="size-3" />
+                  <span className="text-[11px] leading-3">
+                    Check-in to prevent no-show
+                  </span>
+                </p>
+
         {isSuccess && (
-          <p className="text-right text-xs font-medium text-green-600">
+          <p className="sm:text-right text-center text-xs font-medium text-green-600">
             Check-in successful!
           </p>
         )}
         {isError && (
-          <p className="rounded-md bg-red-200 px-2 py-1 text-right text-xs font-medium text-red-600">
+          <p className="rounded-md bg-red-200 px-2 py-1 sm:text-right text-center text-xs font-medium text-red-600">
             Unable to check in
           </p>
         )}

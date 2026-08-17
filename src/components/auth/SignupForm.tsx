@@ -84,13 +84,15 @@ export default function SignupForm({ oauthError }: { oauthError?: string }) {
             <User className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-app-neutral/35" />
             <Input
               id="fullName"
+              aria-invalid={!!errors.fullName}
+              aria-describedby="fullName-error"
               placeholder="Alex Rivera"
               className="h-10 border-app-neutral/15 bg-white pl-9 pr-3 text-sm focus-visible:border-app-primary focus-visible:ring-app-primary/20"
               {...register("fullName")}
             />
           </div>
           {errors.fullName && (
-            <p className="text-sm text-red-600">{errors.fullName.message}</p>
+            <p id="fullName-error" className="text-sm text-red-600">{errors.fullName.message}</p>
           )}
         </div>
 
@@ -102,6 +104,8 @@ export default function SignupForm({ oauthError }: { oauthError?: string }) {
             <Mail className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-app-neutral/35" />
             <Input
               id="email"
+              aria-invalid={!!errors.email}
+              aria-describedby="email-error"
               type="email"
               placeholder="name@company.com"
               className="h-10 border-app-neutral/15 bg-white pl-9 pr-3 text-sm focus-visible:border-app-primary focus-visible:ring-app-primary/20"
@@ -109,7 +113,7 @@ export default function SignupForm({ oauthError }: { oauthError?: string }) {
             />
           </div>
           {errors.email && (
-            <p className="text-sm text-red-600">{errors.email.message}</p>
+            <p id="email-error" className="text-sm text-red-600">{errors.email.message}</p>
           )}
         </div>
 
@@ -121,6 +125,8 @@ export default function SignupForm({ oauthError }: { oauthError?: string }) {
             <Lock className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-app-neutral/35" />
             <Input
               id="password"
+              aria-invalid={!!errors.password}
+              aria-describedby="password-error"
               type={showPassword ? "text" : "password"}
               placeholder="Min. 8 characters"
               className="h-10 border-app-neutral/15 bg-white pl-9 pr-10 text-sm focus-visible:border-app-primary focus-visible:ring-app-primary/20"
@@ -140,7 +146,7 @@ export default function SignupForm({ oauthError }: { oauthError?: string }) {
             </button>
           </div>
           {errors.password && (
-            <p className="text-sm text-red-600">{errors.password.message}</p>
+            <p id="password-error" className="text-sm text-red-600">{errors.password.message}</p>
           )}
         </div>
 
@@ -150,6 +156,8 @@ export default function SignupForm({ oauthError }: { oauthError?: string }) {
         >
           <input
             id="termsAccepted"
+            aria-invalid={!!errors.termsAccepted}
+            aria-describedby="termsAccepted-error"
             type="checkbox"
             className="size-3.5 rounded border-app-neutral/20 accent-app-primary"
             {...register("termsAccepted")}
@@ -159,10 +167,11 @@ export default function SignupForm({ oauthError }: { oauthError?: string }) {
           </span>
         </label>
         {errors.termsAccepted && (
-          <p className="text-sm text-red-600">{errors.termsAccepted.message}</p>
+          <p id="termsAccepted-error" className="text-sm text-red-600">{errors.termsAccepted.message}</p>
         )}
 
         <Button
+          role="button"
           type="submit"
           disabled={isSubmitting}
           className="h-11 w-full cursor-pointer bg-app-primary text-sm font-semibold text-white hover:bg-app-primary/90"
@@ -181,12 +190,13 @@ export default function SignupForm({ oauthError }: { oauthError?: string }) {
 
       <form action={signInWithGoogleAction}>
         <Button
+          role="button"
           type="submit"
           variant="outline"
           className="h-10 w-full cursor-pointer border-app-neutral/15 bg-white text-sm font-medium text-app-neutral hover:bg-app-tertiary"
         >
           <Image
-            src="/images/auth/Google icon.png"
+            src="/images/auth/GoogleIcon.png"
             alt=""
             width={16}
             height={16}

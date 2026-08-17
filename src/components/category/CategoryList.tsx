@@ -1,6 +1,11 @@
+'use client';
+
 import Link from "next/link";
 import { MapPin, Users } from "lucide-react";
 import { Workspace, WorkspaceImage } from "@/types/workspace";
+import Image from "next/image";
+import { childVariants} from "../../lib/animation/animation";
+import { motion } from "framer-motion";
 
 type CategoryListProps = {
   workspace: Workspace;
@@ -42,12 +47,17 @@ export default function CategoryList({ workspace, category }: CategoryListProps)
   const firstMeta = workspace.location_label || workspace.workspace_type || "Flexible access";
 
   return (
-    <article className="group overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-app-neutral/10 transition hover:-translate-y-0.5 hover:shadow-md">
+    <motion.article
+    variants={childVariants}
+    className="group overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-app-neutral/10 transition hover:-translate-y-0.5 hover:shadow-md">
       <div className="relative aspect-[1.55] w-full overflow-hidden bg-app-primary/10">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           src={imageSrc}
           alt={workspace.name}
+          fill
+          sizes="(min-width: 640px) 144px, 112px"
+          priority
           className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
         />
         <span className="absolute right-3 top-3 rounded-full bg-app-primary px-3 py-1 text-xs font-bold text-app-tertiary shadow-sm">
@@ -90,6 +100,6 @@ export default function CategoryList({ workspace, category }: CategoryListProps)
           View Details
         </Link>
       </div>
-    </article>
+    </motion.article>
   );
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import { DayPicker, getDefaultClassNames } from "@daypicker/react";
+import { useEffect, useState } from "react";
 
 type Prop = {
   bookedDates: string[];
@@ -9,9 +10,18 @@ type Prop = {
 };
 
 const DayCalendar = ({ bookedDates, selected, onSelect }: Prop) => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const [today, setToday] = useState<Date | null>(null);
   const defaultClassNames = getDefaultClassNames();
+
+  useEffect(() => {
+    const timeout = window.setTimeout(() => {
+      const nextToday = new Date();
+      nextToday.setHours(0, 0, 0, 0);
+      setToday(nextToday);
+    }, 0);
+
+    return () => window.clearTimeout(timeout);
+  }, []);
 
   const bookedDateObjects = bookedDates
     .filter(Boolean)
@@ -21,7 +31,9 @@ const DayCalendar = ({ bookedDates, selected, onSelect }: Prop) => {
       return nextDate;
     });
 
-  const disabledRules: Array<Date | { before: Date }> = [{ before: today }];
+  const disabledRules: Array<Date | { before: Date }> = today
+    ? [{ before: today }]
+    : [];
   if (bookedDateObjects.length > 0) {
     disabledRules.push(...bookedDateObjects);
   }

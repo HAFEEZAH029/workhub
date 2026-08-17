@@ -3,11 +3,18 @@ import { workspace } from "@/types/workspace";
 import { workspacecategory } from "@/types/category";
 import { MapPin } from "lucide-react";
 import { useContext } from "react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { ModalContext } from "@/lib/context/modal-context";
-import HourlyModal from "@/components/modal/HourlyModal";
-import DayModal from "@/components/modal/DayModal";
 import { useAuth } from "@/util/hooks/useAuth";
+
+const HourlyModal = dynamic(() => import("@/components/modal/HourlyModal"), {
+  ssr: false,
+});
+
+const DayModal = dynamic(() => import("@/components/modal/DayModal"), {
+  ssr: false,
+});
 
 type HeaderProps = {
   workspace: workspace;

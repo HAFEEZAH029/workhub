@@ -75,13 +75,15 @@ export default function LoginForm({ oauthError }: { oauthError?: string }) {
           </Label>
           <Input
             id="email"
+            aria-invalid={!!errors.email}
+            aria-describedby="email-error"
             type="email"
             placeholder="name@company.com"
             className="h-12 border-app-neutral/15 bg-white px-4 focus-visible:border-app-primary focus-visible:ring-app-primary/20"
             {...register("email")}
           />
           {errors.email && (
-            <p className="text-sm text-red-600">{errors.email.message}</p>
+            <p id="email-error" className="text-sm text-red-600">{errors.email.message}</p>
           )}
         </div>
 
@@ -96,6 +98,8 @@ export default function LoginForm({ oauthError }: { oauthError?: string }) {
           <div className="relative">
             <Input
               id="password"
+              aria-invalid={!!errors.password}
+              aria-describedby="password-error"
               type={showPassword ? "text" : "password"}
               placeholder="Password"
               className="h-12 border-app-neutral/15 bg-white px-4 pr-11 focus-visible:border-app-primary focus-visible:ring-app-primary/20"
@@ -115,11 +119,12 @@ export default function LoginForm({ oauthError }: { oauthError?: string }) {
             </button>
           </div>
           {errors.password && (
-            <p className="text-sm text-red-600">{errors.password.message}</p>
+            <p id="password-error" className="text-sm text-red-600">{errors.password.message}</p>
           )}
         </div>
 
         <Button
+          role="button"
           type="submit"
           disabled={isSubmitting}
           className="h-12 w-full cursor-pointer bg-app-primary text-white hover:bg-app-primary/90"
@@ -136,13 +141,14 @@ export default function LoginForm({ oauthError }: { oauthError?: string }) {
 
       <form action={signInWithGoogleAction}>
         <Button
+          role="button"
           type="submit"
           variant="outline"
           className="h-12 w-full cursor-pointer border-app-neutral/15 bg-white text-app-neutral hover:bg-app-tertiary"
         >
           <Image
-            src="/images/auth/Google icon.png"
-            alt=""
+            src="/images/auth/GoogleIcon.png"
+            alt="Co-working desks"
             width={20}
             height={20}
             className="size-5"

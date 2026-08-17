@@ -6,12 +6,13 @@ type EndTimesDisplayProps = {
     selectedStartTime: string | null;
     selectedEndTime: string;
     onSelectEndTime: (time: string) => void;
-    fetchedSlots: any[];
+    fetchedSlots: unknown[];
     isSameDay: boolean;
     validStartTimes: string[];
     isEndTimeOpen: boolean;
     onEndTimeToggle: () => void;
     unBookedHours: string[];
+    currentTime: Date | null;
 };
 
 const DefaultEndTimes = getConsecutiveTimeSlots("9:00", "17:00");
@@ -26,9 +27,12 @@ const EndTimesDisplay = ({
     isEndTimeOpen,
     onEndTimeToggle,
     unBookedHours,
+    currentTime,
 }: EndTimesDisplayProps) => {
 
-    const filteredEndSlots = sameDayCheck(DefaultEndTimes);
+    const filteredEndSlots = currentTime
+        ? sameDayCheck(DefaultEndTimes, currentTime)
+        : DefaultEndTimes;
 
     const validEndTimes = useMemo(() => {
             if (!selectedStartTime) return [];
@@ -42,7 +46,7 @@ const EndTimesDisplay = ({
             }
 
             return getEndTimes(selectedStartTime, unBookedHours ?? []);
-      }, [selectedStartTime, validStartTimes, filteredEndSlots, isSameDay, fetchedSlots]);
+      }, [selectedStartTime, validStartTimes, filteredEndSlots, isSameDay, fetchedSlots, unBookedHours]);
 
   return (
     <div className="flex flex-col sm:flex-row items-center sm:justify-between gap-4 mt-5">

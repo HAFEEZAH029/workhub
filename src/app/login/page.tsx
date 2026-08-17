@@ -25,7 +25,7 @@ export default async function LoginPage({
 
           <div className="relative aspect-[1.18] max-h-[420px] overflow-hidden rounded-lg shadow-[0_24px_70px_rgba(17,24,39,0.16)]">
             <Image
-              src="/Images/auth/signin.jpg"
+              src="/images/auth/signin.jpg"
               alt="Modern workspace lounge"
               fill
               priority

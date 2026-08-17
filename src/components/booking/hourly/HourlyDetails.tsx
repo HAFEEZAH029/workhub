@@ -36,12 +36,28 @@ const HourlyDetails = ({
 }: HourlyDetailsProps) => {
 
     const [isEndTimeOpen, setIsEndTimeOpen] = useState(false);
+    const [currentTime, setCurrentTime] = useState<Date | null>(null);
 
     useEffect(() => {
+      const timeout = window.setTimeout(() => {
         onSelectStartTime(null);
         onSelectEndTime("select end time");
         setIsEndTimeOpen(false);
-    }, [selectedDate, selectedWorkspace?.id]);
+      }, 0);
+
+      return () => window.clearTimeout(timeout);
+    }, [selectedDate, selectedWorkspace?.id, onSelectEndTime, onSelectStartTime]);
+
+  useEffect(() => {
+    const updateCurrentTime = () => setCurrentTime(new Date());
+    const timeout = window.setTimeout(updateCurrentTime, 0);
+    const interval = window.setInterval(updateCurrentTime, 60_000);
+
+    return () => {
+      window.clearTimeout(timeout);
+      window.clearInterval(interval);
+    };
+  }, []);
 
   useEffect(() => {
     if (!selectedStartTime || !selectedEndTime || selectedEndTime === "select end time") {
@@ -70,11 +86,14 @@ const HourlyDetails = ({
     const bookedTimeBlocks = fetchedSlots?.map((item) => {
         return getConsecutiveTimeSlots(item.start_time, item.end_time);
     })|| [];
-    const today = new Date();
-    const isSameDay = selectedDate?.toDateString() === today.toDateString();
+    const isSameDay = currentTime
+      ? selectedDate?.toDateString() === currentTime.toDateString()
+      : false;
     const BookedSlots = bookedTimeBlocks?.flat();
     const unBookedSlots = MainBookableTimes.filter((time) => !BookedSlots?.includes(time));
-    const filteredSlots = sameDayCheck(DefaultStartTimes);
+    const filteredSlots = currentTime
+      ? sameDayCheck(DefaultStartTimes, currentTime)
+      : DefaultStartTimes;
 
     const validStartTimes = useMemo(() => {
          if (fetchedSlots?.length === 0 && !isSameDay) {
@@ -89,7 +108,7 @@ const HourlyDetails = ({
     }, [filteredSlots, fetchedSlots, unBookedSlots, isSameDay]);
 
     function forwardCheck(arr: string[], isSameDay: boolean) {
-      const source = isSameDay ? sameDayCheck(arr) : arr;
+      const source = isSameDay && currentTime ? sameDayCheck(arr, currentTime) : arr;
 
       return source?.filter((time) => {
         const mins = totalMinutes(time);
@@ -138,6 +157,8 @@ const HourlyDetails = ({
             return (
               <button
               key={item}
+              role="button"
+              aria-checked={isSelected}
               className={`cursor-pointer font-semibold py-2 px-6 rounded-lg transition-colors duration-300 ${
                 isSelected
               ? "bg-app-primary text-app-tertiary"
@@ -169,6 +190,7 @@ const HourlyDetails = ({
             isEndTimeOpen={isEndTimeOpen}
             onEndTimeToggle={handleEndTimeToggle}
             unBookedHours={unBookedSlots ?? []}
+            currentTime={currentTime}
           />
 
           <PriceDisplay
