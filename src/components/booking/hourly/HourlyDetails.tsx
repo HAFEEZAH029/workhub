@@ -8,6 +8,7 @@ import { sameDayCheck } from "@/lib/booking/availability";
 import EndTimesDisplay from "./EndTimesDisplay";
 import PriceDisplay from "./PriceDisplay";
 import ConfirmButton from "../ConfirmButton";
+import { format } from "date-fns";
 
 type HourlyDetailsProps = {
   selectedDate?: Date;
@@ -76,10 +77,10 @@ const HourlyDetails = ({
     onSetTotalPrice(durationHours * (selectedWorkspace?.hourly_rate ?? 0));
   }, [selectedEndTime, selectedStartTime, selectedWorkspace?.hourly_rate, onSetTotalPrice]);
 
-    const bookingDate = selectedDate?.toISOString().split('T')[0];
+    const bookingDate = selectedDate ? format(selectedDate, "yyyy-MM-dd") : undefined;
     const workspaceId = selectedWorkspace?.id;
     const {data:fetchedSlots, isLoading:isDataLoading, isError} = useQuery({
-        queryKey: ["workspace-bookings", bookingDate, workspaceId],
+        queryKey: ["bookings", "workspace", workspaceId, bookingDate],
         queryFn: () => getWorkspaceBookingsByIDAndDate(workspaceId as string | number, bookingDate as string),
         enabled: !!bookingDate && !!workspaceId,
     });

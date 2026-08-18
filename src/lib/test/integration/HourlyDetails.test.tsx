@@ -77,8 +77,30 @@ describe("Hourly Details", () => {
 
     expect(screen.getByRole("button", { name: "08:30" })).toBeInTheDocument();
     expect(
+      screen.queryByRole("button", { name: "10:00" })
+    ).not.toBeInTheDocument();
+    expect(
       screen.queryByRole("button", { name: "10:30" })
     ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "11:00" })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "11:30" })
+    ).not.toBeInTheDocument();
+  });
+
+  it("fetches bookings with the local calendar date", async () => {
+    mockedGetWorkspaceBookings.mockResolvedValue([]);
+
+    renderComponent();
+
+    await waitFor(() => {
+      expect(mockedGetWorkspaceBookings).toHaveBeenCalledWith(
+        "workspace-1",
+        "2026-08-20"
+      );
+    });
   });
 
   it("shows an error when fetching bookings fails", async () => {

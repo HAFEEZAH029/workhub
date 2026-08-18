@@ -101,7 +101,7 @@ const DayModalContent = ({ selectedWorkspace, onClose, isOpen }: DayModalContent
         });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["bookings"] });
+      queryClient.invalidateQueries({ queryKey: ["bookings", ] });
       setOnSuccess(true);
       toast.success("Booking Successful!", {
       description: "you have successfully made your booking",

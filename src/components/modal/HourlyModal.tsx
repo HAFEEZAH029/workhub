@@ -48,7 +48,14 @@ const HourlyModal = ({ selectedWorkspace, isOpen }: HourlyModalProps) => {
           });
       },
       onSuccess: () => {
+      const bookingDate = selectedDate ? format(selectedDate, "yyyy-MM-dd") : undefined;
+
       queryClient.invalidateQueries({ queryKey: ["bookings"] });
+      if (selectedWorkspace?.id && bookingDate) {
+        queryClient.invalidateQueries({
+          queryKey: ["bookings", "workspace", selectedWorkspace.id, bookingDate],
+        });
+      }
       setOnSuccess(true);
       toast.success("Booking Successful!", {
       description: "you have successfully made your booking",
