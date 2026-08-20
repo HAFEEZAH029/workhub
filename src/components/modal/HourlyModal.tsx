@@ -15,6 +15,7 @@ import { totalMinutes } from "@/lib/booking/availability";
 import { toast } from "sonner";
 import { AlertCircle, CheckCircle2 } from "lucide-react";
 import { format } from 'date-fns';
+import Image from "next/image";
 
 
 type HourlyModalProps = {
@@ -156,9 +157,13 @@ const HourlyModal = ({ selectedWorkspace, isOpen }: HourlyModalProps) => {
         <section className="flex items-center justify-between border-b border-b-app-primary pb-4 mb-5">
          <div className="space-y-1">
           <h1 className="font-bold">{selectedWorkspace.name}</h1>
-          <img
+          <Image
             src={workImage?.image_path ?? ""}
             alt={workImage?.alt_text ?? selectedWorkspace.name}
+            width={80}
+            height={56}
+            priority
+            sizes="80px"
             className="h-14 w-20 rounded-md"
           />
          </div>

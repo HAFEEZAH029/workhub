@@ -86,7 +86,9 @@ const CategoryInfo = ({
             </li>
             <li className="flex items-center justify-between">
               <p className="text-app-neutral">Booking Type</p>
-              <p>{data?.booking_type}</p>
+              <p className="text-app-primary/90 font-semibold">
+                {data?.booking_type === "day_pass" ? "day-pass" : "hourly" }
+              </p>
             </li>
             <li className="flex items-center justify-between">
               <p className="text-app-neutral">Price Range</p>

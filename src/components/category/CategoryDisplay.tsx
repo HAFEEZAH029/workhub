@@ -1,5 +1,5 @@
 'use client';
-import { useState, useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { filterConfig } from "@/util/config";
 import { Workspace } from "@/types/workspace";
 import { ChevronDown, ListFilter } from "lucide-react";
@@ -61,22 +61,61 @@ function TopMenu ({currentFilter, category, onSelect, view, onSetView}: MenuProp
 function FilterDropDown ({currentFilter, category, onSelect}:FilterProps) {
 
     const filterOptions = filterConfig[category]?.filters;
+    const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (!isOpen) return;
+
+        function handlePointerDown(event: PointerEvent) {
+            if (!dropdownRef.current?.contains(event.target as Node)) {
+                setIsOpen(false);
+            }
+        }
+
+        function handleEscape(event: KeyboardEvent) {
+            if (event.key === "Escape") {
+                setIsOpen(false);
+            }
+        }
+
+        document.addEventListener("pointerdown", handlePointerDown);
+        document.addEventListener("keydown", handleEscape);
+
+        return () => {
+            document.removeEventListener("pointerdown", handlePointerDown);
+            document.removeEventListener("keydown", handleEscape);
+        };
+    }, [isOpen]);
 
     return (
-        <details className="group relative">
-            <summary aria-haspopup = "listbox" className="flex h-10 cursor-pointer list-none items-center gap-2 rounded-md border border-app-neutral/15 bg-white px-3 text-sm font-bold text-app-neutral shadow-sm transition hover:border-app-primary/40 [&::-webkit-details-marker]:hidden">
+        <div ref={dropdownRef} className="relative">
+            <button
+                type="button"
+                aria-haspopup="listbox"
+                aria-expanded={isOpen}
+                onClick={() => setIsOpen((prev) => !prev)}
+                className="flex h-10 cursor-pointer list-none items-center gap-2 rounded-md border border-app-neutral/15 bg-white px-3 text-sm font-bold text-app-neutral shadow-sm transition hover:border-app-primary/40"
+            >
                 <ListFilter className="size-4" />
                 <span>{currentFilter}</span>
-                <ChevronDown className="size-4 transition group-open:rotate-180" />
-            </summary>
-            <div className="absolute right-0 z-20 mt-2 w-40 overflow-hidden rounded-md bg-white py-1 shadow-xl ring-1 ring-app-neutral/10">
+                <ChevronDown className={`size-4 transition ${isOpen ? "rotate-180" : "rotate-0"}`} />
+            </button>
+            {isOpen ? (
+            <div role="listbox" className="absolute right-0 z-20 mt-2 w-40 overflow-hidden rounded-md bg-white py-1 shadow-xl ring-1 ring-app-neutral/10">
                 {filterOptions?.map((option) => {
                    const isActive = currentFilter.toLowerCase() === option.toLowerCase();
 
                     return (
                       <button
                         key={option}
-                        onClick={() => onSelect(option)}
+                        type="button"
+                        role="option"
+                        aria-selected={isActive}
+                        onClick={() => {
+                          onSelect(option);
+                          setIsOpen(false);
+                        }}
                         className={`block w-full px-4 py-2 text-left text-sm font-semibold transition hover:bg-app-primary/10 ${
                           isActive ? "bg-app-primary text-app-tertiary hover:bg-app-primary" : "text-app-neutral"
                         }`}
@@ -86,7 +125,8 @@ function FilterDropDown ({currentFilter, category, onSelect}:FilterProps) {
                     )
                 })}
             </div>
-        </details>
+            ) : null}
+        </div>
     )
 };
 
@@ -120,10 +160,10 @@ const CategoryDisplay = ({initialWorkspaces, category, Category}: SpaceProps) =>
         view === "grid" ?  (
        <>
       <motion.div
+      key={`${category}-${currentFilter}`}
       variants={ContainerVariants}
       initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.10 }}
+      animate="visible"
       className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {filteredWorkspaces.map((workspace) => (
           <CategoryList key={workspace.id} workspace={workspace} category={category} />

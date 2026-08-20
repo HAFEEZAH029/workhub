@@ -17,6 +17,10 @@ type ActiveBookingCardProps = {
 const ActiveBookingCard = ({ booking, now, userID }: ActiveBookingCardProps) => {
   const alreadyCheckedIn = Boolean(booking.checkedInAt);
 
+  // Persists for the lifetime of this component instance - drives the
+  // toggle's permanent checked/locked state. Deliberately separate from
+  // isSuccess, which is only meant to control the temporary banner.
+  const [isCheckedInThisSession, setIsCheckedInThisSession] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
   const queryClient = useQueryClient();
@@ -25,8 +29,9 @@ const ActiveBookingCard = ({ booking, now, userID }: ActiveBookingCardProps) => 
     mutationFn: ({ bookingID, userID }: { bookingID: string; userID: string }) =>
       checkInUser(bookingID, userID),
     onSuccess: () => {
-        queryClient.invalidateQueries({queryKey: ["bookings/active", userID]})
-        setIsSuccess(true)
+      queryClient.invalidateQueries({ queryKey: ["bookings/active", userID] });
+      setIsCheckedInThisSession(true);
+      setIsSuccess(true);
     },
     onError: () => setIsError(true),
   });
@@ -43,7 +48,7 @@ const ActiveBookingCard = ({ booking, now, userID }: ActiveBookingCardProps) => 
     return () => clearTimeout(timer);
   }, [isError]);
 
-  const isChecked = alreadyCheckedIn || isSuccess;
+  const isChecked = alreadyCheckedIn || isCheckedInThisSession;
   const isLocked = isChecked || isPending;
 
   const handleCheckIn = () => {

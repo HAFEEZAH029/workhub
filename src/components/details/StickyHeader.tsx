@@ -42,6 +42,7 @@ const StickyHeader = ({ workspace, Category }: HeaderProps) => {
 
 
   return (
+   <>
     <section className="sticky top-0 z-30 sm:mx-0 flex flex-col items-center justify-between gap-4 border-b border-app-neutral/10 bg-app-tertiary/95 px-5 py-4 backdrop-blur sm:flex-row sm:gap-0 sm:px-6 sm:py-5">
       <div className="space-y-1.5 text-center sm:text-left">
         <h1 className="text-xl font-bold text-app-neutral sm:text-2xl">
@@ -81,17 +82,20 @@ const StickyHeader = ({ workspace, Category }: HeaderProps) => {
           {isLoading ? 'Checking status....' : 'Book now'}
         </button>
       </div>
+    </section>
 
-      <HourlyModal 
-      isOpen={modalOpen === "hourly"} 
-      selectedWorkspace={workspace} 
+    <div>
+      <HourlyModal
+      isOpen={modalOpen === "hourly"}
+      selectedWorkspace={workspace}
       />
       
-      <DayModal 
-      isOpen={modalOpen === "day_pass"} 
-      selectedWorkspace={workspace} 
+      <DayModal
+      isOpen={modalOpen === "day_pass"}
+      selectedWorkspace={workspace}
       />
-    </section>
+    </div>
+   </>
   );
 };
 

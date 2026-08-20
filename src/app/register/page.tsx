@@ -17,7 +17,7 @@ export default async function RegisterPage({
               Elevate your workspace experience.
             </h1>
             <p className="text-sm font-semibold leading-6 text-app-secondary">
-              Join over 5,000 professionals who use WorkHub to find and book
+              Join over 5,000 professionals who use WorkCorp to find and book
               premium workspaces with effortless precision.
             </p>
           </div>

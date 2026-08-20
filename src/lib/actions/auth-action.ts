@@ -26,10 +26,33 @@ function getGoogleErrorRedirectPath(referer: string | null, origin: string) {
 
 async function getRequestOrigin() {
   const headerStore = await headers();
+  const origin = headerStore.get("origin");
+  const forwardedHost = headerStore.get("x-forwarded-host");
+  const host = forwardedHost ?? headerStore.get("host");
+  const forwardedProto = headerStore.get("x-forwarded-proto");
+  const protocol = forwardedProto ?? (host?.includes("localhost") ? "http" : "https");
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    process.env.NEXT_PUBLIC_APP_URL ??
+    process.env.SITE_URL ??
+    process.env.URL ??
+    process.env.DEPLOY_PRIME_URL ??
+    process.env.DEPLOY_URL ??
+    process.env.VERCEL_PROJECT_PRODUCTION_URL ??
+    process.env.VERCEL_URL;
+
+  const resolvedOrigin =
+    origin ??
+    (host ? `${protocol}://${host}` : undefined) ??
+    (siteUrl
+      ? siteUrl.startsWith("http")
+        ? siteUrl
+        : `https://${siteUrl}`
+      : "http://localhost:3000");
 
   return {
     headerStore,
-    origin: headerStore.get("origin") ?? "http://localhost:3000", //there is usually a third option, which is to use an env. variable.
+    origin: resolvedOrigin.replace(/\/$/, ""),
   };
 }
 

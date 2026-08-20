@@ -35,7 +35,7 @@ const renderComponent = () => {
   return render(
     <QueryClientProvider client={queryClient}>
       <HourlyDetails
-        selectedDate={new Date("2026-08-20T00:00:00")}
+        selectedDate={new Date("2026-08-25T00:00:00")}
         selectedWorkspace={workspace}
         selectedStartTime={null}
         selectedEndTime="select end time"
@@ -98,7 +98,7 @@ describe("Hourly Details", () => {
     await waitFor(() => {
       expect(mockedGetWorkspaceBookings).toHaveBeenCalledWith(
         "workspace-1",
-        "2026-08-20"
+        "2026-08-25"
       );
     });
   });

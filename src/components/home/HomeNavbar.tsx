@@ -1,6 +1,7 @@
  "use client";
 
 import { useRef, useEffect } from "react";
+import { useFormStatus } from "react-dom";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -51,6 +52,20 @@ function UserAvatar({ user }: { user: HomeNavUser }) {
   );
 }
 
+function LogoutButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      className="block w-full ml-2 mr-2 rounded-md cursor-pointer px-4 py-1.5 text-left font-medium bg-red-200 text-red-600 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-70"
+    >
+      {pending ? "Logging out..." : "Logout"}
+    </button>
+  );
+}
+
 function AccountMenu({ user }: { user: HomeNavUser }) {
 
   const detailsRef = useRef<HTMLDetailsElement>(null);
@@ -92,12 +107,7 @@ function AccountMenu({ user }: { user: HomeNavUser }) {
           History
         </Link>
         <form action={logout}>
-          <button
-            type="submit"
-            className="block w-full px-4 py-1.5 text-left font-medium text-red-600 hover:bg-red-50"
-          >
-            Logout
-          </button>
+          <LogoutButton />
         </form>
       </div>
     </details>

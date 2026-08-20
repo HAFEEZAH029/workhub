@@ -27,7 +27,7 @@ const features: Feature[] = [
     iconColor: "text-app-secondary",
     title: "Flexibility",
     description:
-      "Book for an hour, a day, or a month. Pay only for the space you actually use.",
+      "Book for an hour, hours, or a day. Pay only for the space you actually use.",
   },
   {
     icon: Users,

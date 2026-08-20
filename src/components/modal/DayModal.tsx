@@ -18,6 +18,7 @@ import { totalMinutes } from "@/lib/booking/availability";
 import { toast } from "sonner";
 import { AlertCircle, CheckCircle2 } from "lucide-react";
 import { format } from 'date-fns';
+import Image from "next/image";
 
 type DayModalProps = {
   selectedWorkspace: Workspace | null;
@@ -197,9 +198,13 @@ const DayModalContent = ({ selectedWorkspace, onClose, isOpen }: DayModalContent
               <section className="flex flex-col gap-4 border-b border-app-primary/30 pb-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="space-y-2">
                   <h1 className="text-lg font-bold text-app-primary">{selectedWorkspace.name}</h1>
-                  <img
+                  <Image
                   src={workImage?.image_path ?? ""}
                   alt={workImage?.alt_text ?? selectedWorkspace.name}
+                  width={96}
+                  height={64}
+                  priority
+                  sizes="96px"
                   className="h-16 w-24 rounded-md object-cover"
                   />
                 </div>

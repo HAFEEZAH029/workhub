@@ -20,7 +20,7 @@ function SuccessToast({ show }: { show: boolean }) {
       }`}
     >
       <CheckCircle2 className="size-4 shrink-0" />
-      Message sent successfully! We&apos;ll get back to you soon.
+      Message sent successfully! We'll get back to you soon.
     </div>
   );
 }
