@@ -7,10 +7,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  signInWithGoogleAction,
-  signupAction,
-} from "@/lib/actions/auth-action";
+import { signupAction } from "@/lib/actions/auth-action";
 import { signUpSchema, type signUpInput } from "@/lib/validation/auth";
 import { useOAuthErrorMessage } from "@/lib/auth/use-oauth-error-message";
 import { Button } from "@/components/ui/button";
@@ -188,7 +185,7 @@ export default function SignupForm({ oauthError }: { oauthError?: string }) {
         <div className="h-px flex-1 bg-app-neutral/10" />
       </div>
 
-      <form action={signInWithGoogleAction}>
+      <form action="/auth/google" method="get">
         <Button
           role="button"
           type="submit"
